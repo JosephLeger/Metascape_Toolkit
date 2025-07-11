@@ -411,16 +411,14 @@ meta_DrawHeatmaps <- function(x,
 
 meta_DrawPathmap <- function(sub_counts, 
                              genelist, 
-                             color = ColorBlind,
+                             group.colors=ColorBlind,
                              title = 'Pathmap'){
   
   # Draw a heatmap separating previously defined processes of interest
   #
   # sub_counts = subseted table containing only columnes and rows of interest
   # genelist   = list resulting from meta_GetGenes() function
-  # color      = colors 
-  
-  suppressPackageStartupMessages(library(pheatmap))
+  # colors     = colors 
   
   # Initialize empty objects
   org_table  <- data.frame()
@@ -452,7 +450,7 @@ meta_DrawPathmap <- function(sub_counts,
   # Attribute colors to each process
   cols <- c()
   for(i in 1:length(names(table(gene_group)))){
-    cols <- c(cols, color[i])
+    cols <- c(cols, group.colors[i])
   }
   names(cols) <- names(table(gene_group))
   ann_colors  <- list(gene_group=cols) 
