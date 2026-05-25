@@ -111,7 +111,7 @@ meta_Subset <- function(x, feature='LogQ', thr=NA, top=NA){
 
 #-------------------------------------------------------------------------------
 
-meta_GetGenes <- function(meta_object, pathlist){
+meta_GetGenes <- function(meta_object, pathlist, intersect = T){
   
   # Get list of genes belonging to provided pathways
   #
@@ -138,20 +138,22 @@ meta_GetGenes <- function(meta_object, pathlist){
     }
     result[[n]] <- category
   }
-  
-  # Define intersect by category
-  intersect <- list(Merged = c())
-  for(i in 1:(length(result)-1)){
-    n1      <- names(result)[i]
-    for(j in (i+1):length(result)){
-      n2    <- names(result)[j]
-      genes <- result[[i]][['Merged']][
-        result[[i]][['Merged']] %in% result[[j]][['Merged']]]
-      intersect[[paste0('[', n1, ']-[', n2, ']')]] <- genes
-      intersect[['Merged']] <- unique(c(intersect[['Merged']], genes))
+
+  if(intersect){
+    # Define intersect by category
+    intersect <- list(Merged = c())
+    for(i in 1:(length(result)-1)){
+      n1      <- names(result)[i]
+      for(j in (i+1):length(result)){
+        n2    <- names(result)[j]
+        genes <- result[[i]][['Merged']][
+          result[[i]][['Merged']] %in% result[[j]][['Merged']]]
+        intersect[[paste0('[', n1, ']-[', n2, ']')]] <- genes
+        intersect[['Merged']] <- unique(c(intersect[['Merged']], genes))
+      }
     }
+    result[['Intersect']] <- intersect
   }
-  result[['Intersect']] <- intersect
   
   return(result)
 }
